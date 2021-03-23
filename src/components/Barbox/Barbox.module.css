@@ -1,0 +1,33 @@
+.BarboxContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.Barbox {
+    /* outline: 1px solid red; */
+    width: 80%;
+    height: calc( 100vh - 80px );
+    margin-top: 5px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: stretch;
+    align-items: flex-end;
+}
+
+.Bar {
+    /* outline: 1px solid darkcyan; */
+    width: 100%;
+    /* margin: 0px 5px; */
+    border: 1px solid hsl(195, 50%, 40%);
+    background-color: hsl(195, 50%, 30%);
+}
+
+.Bar.Selected {
+    background-color: hsl(0, 50%, 30%);
+    border-color: hsl(0, 50%, 40%);
+}
+
+.Bar.Changed {
+    background-color: hsl(135, 70%, 40%);
+    border-color: hsl(135, 70%, 50%);
+}

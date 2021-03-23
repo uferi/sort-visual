@@ -1,0 +1,51 @@
+.Button {
+    /* outline: 1px solid red; */
+    box-sizing: border-box;
+    color: hsl(195, 50%, 20%);
+    background-color: hsl(195, 50%, 45%);
+    border: 1px solid hsl(195, 50%, 45%);
+    padding: 10px 10px;
+    margin: 0px 5px;
+    font-weight: 500;
+    border-radius: 5px;
+    user-select: none;
+    width: 200px;
+}
+
+.Button:hover {
+    cursor: pointer;
+    color: hsl(195, 80%, 65%);
+    background-color: hsl(195, 50%, 35%);
+    border: 1px solid hsl(195, 50%, 25%);
+}
+
+.Button:active {
+    color: hsl(195, 50%, 10%);
+    background-color: hsl(195, 70%, 75%);
+    border: 1px solid hsl(195, 50%, 45%);
+}
+
+.Button.Running {
+    color: hsl(145, 80%, 20%);
+    background-color: hsl(145, 80%, 50%);
+    border-color: hsl(145, 50%, 40%);
+    font-weight: 700;
+}
+
+.Button.Running:hover {
+    color: hsl(145, 80%, 25%);
+    background-color: hsl(145, 90%, 65%);
+    border-color: hsl(145, 50%, 40%);
+}
+
+.Button.Running:active {
+    color: hsl(0, 80%, 25%);
+    background-color: hsl(0, 90%, 60%);
+    border-color: hsl(0, 50%, 40%);
+}
+
+.Button.Select {
+    color: hsl(195, 50%, 40%);
+    background-color: hsl(195, 50%, 45%);
+    border-color: hsl(195, 50%, 45%);
+}
