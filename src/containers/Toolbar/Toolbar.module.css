@@ -14,7 +14,7 @@
 .Logo {
     /* outline: 1px solid red; */
     box-sizing: border-box;
-    width: 100px;
+    width: 70px;
     padding: 7px 5px;
     margin-left: 3px;
     color: hsl(195, 50%, 30%);
@@ -24,4 +24,11 @@
     border-radius: 7px;
     user-select: none;
     box-shadow: 0px 0px 10px hsl(195, 50%, 30%);
+}
+
+@media (max-width: 600px) {
+    .Logo {
+        font-size: 12px;
+        width: auto;
+    }
 }

@@ -14,12 +14,9 @@ class App extends Component {
     tempo: 1000,
     algorithm: 'select',
     isRunning: false,
-    bubbleParms: {
-      currentId: 0,
-      maxId: 63,
-      stepId: 0,
-      maxSteps: 2
-    }
+    bubbleParms: null,
+    insertionParms: null,
+    selectionParms: null,
   }
 
   componentDidMount() {
@@ -77,28 +74,60 @@ class App extends Component {
   }
 
   initParams = (algorithm, barAmount) => {
-
+    let newParams;      
     switch (algorithm){
-        case 'bubble':
-          const newParams = {
-            currentId: 0,
-            maxId: barAmount-1,
-            stepId: 0,
-            maxSteps: 2,
-            isSorted: true
-          }
-          this.setState({
-            isRunning: false,
-            bubbleParms: newParams,
-            selectedValues: [],
-            changedValues: []
-          });
-          return;
-        case 'selection':
-          return;
-        default:
-          return;
-      }
+      case 'bubble':
+          newParams = {
+          currentId: 0,
+          maxId: barAmount-1,
+          stepId: 0,
+          maxSteps: 2,
+          isSorted: true
+        }
+        this.setState({
+          isRunning: false,
+          bubbleParms: newParams,
+          selectedValues: [],
+          changedValues: []
+        });
+        return;
+      case 'insertion':
+        newParams = {
+          currentId: 1,
+          startId: 1,
+          maxId: barAmount-1,
+          stepId: 0,
+          maxSteps: 2,
+          isSorted: true
+        }
+        this.setState({
+          isRunning: false,
+          insertionParms: newParams,
+          selectedValues: [],
+          changedValues: []
+        });
+        return;
+      case 'selection':
+        newParams = {
+          currentId: 0,
+          startId: 0,
+          maxId: barAmount-1,
+          stepId: 0,
+          maxSteps: 2,
+          minValue: 1000,
+          minValueId: 0,
+          isSorted: true
+        }
+        this.setState({
+          isRunning: false,
+          selectionParms: newParams,
+          selectedValues: [],
+          changedValues: []
+        });
+        return;
+      default:
+        return;
+    }
   }
 
   mainSortingLoop = () => {
@@ -111,6 +140,8 @@ class App extends Component {
       switch (this.state.algorithm){
         case 'bubble':
           return this.bubbleSort();
+        case 'insertion':
+          return this.insertionSort();
         case 'selection':
           return this.selectionSort();
         default:
@@ -119,10 +150,103 @@ class App extends Component {
     }
   }
 
+  //------------------------ SELECTION SORT ------------------------
   selectionSort = () => {
-    console.log('[Selection sort] - making a step');
+    // console.log('[Selection sort] - making a step');
+    const updatedParms = {...this.state.selectionParms};
+    const newValues = [...this.state.values];
+    // let newSelection = [...this.state.selectedValues];
+    let newSelection = [];
+    let newChanged = [];
+    
+    newSelection.push(updatedParms.currentId);
+    newChanged.push(updatedParms.startId);
+    const actualValue = newValues[updatedParms.currentId];
+    
+    if(actualValue < updatedParms.minValue){
+      if(updatedParms.minValue !== 1000){
+        updatedParms.isSorted = false;
+      }
+      updatedParms.minValueId = updatedParms.currentId;
+      updatedParms.minValue = actualValue;
+    }
+    newChanged.push(updatedParms.minValueId);
+
+    updatedParms.stepId++;
+    updatedParms.stepId = updatedParms.stepId % 2;
+    
+    if(updatedParms.currentId === updatedParms.maxId){
+      const startValue = newValues[updatedParms.startId];
+      const minValue = newValues[updatedParms.minValueId];
+      newValues[updatedParms.startId] = minValue;
+      newValues[updatedParms.minValueId] = startValue;
+      updatedParms.minValue = 1000;
+
+      updatedParms.currentId = updatedParms.startId;
+      updatedParms.startId++;
+      updatedParms.minValueId = updatedParms.startId;
+    } else {
+      // this.initParams(this.state.algorithm, this.state.barAmount);
+    }
+    
+    updatedParms.currentId++;
+
+    this.setState({
+      selectedValues: newSelection,
+      changedValues: newChanged,
+      values: newValues,
+      selectionParms: updatedParms
+    });
+
+    if( updatedParms.startId === 1 && updatedParms.isSorted ){
+        this.initParams(this.state.algorithm, this.state.barAmount);
+      }
+
+    if(updatedParms.startId === updatedParms.maxId){
+      this.initParams(this.state.algorithm, this.state.barAmount);
+    }
+
   }
 
+  //------------------------ INSERTION SORT ------------------------
+  insertionSort = () => {
+    // console.log('[Insertion sort] - making a step');
+    const updatedParms = {...this.state.insertionParms};
+    const newValues = [...this.state.values];
+    let newSelection = [...this.state.selectedValues];
+    let newChanged = [];
+    if(updatedParms.stepId === 0) {
+      newChanged.push(updatedParms.currentId);
+    } else {
+      const valueOne = newValues[updatedParms.currentId];
+      const valueTwo = newValues[updatedParms.currentId-1];
+      if(valueOne<valueTwo){
+        newChanged.push(updatedParms.currentId-1);
+        newValues[updatedParms.currentId] = valueTwo;
+        newValues[updatedParms.currentId-1] = valueOne;
+        updatedParms.currentId--;
+      } else {
+        newChanged.push(updatedParms.currentId);
+        updatedParms.startId++;
+        updatedParms.currentId = updatedParms.startId;
+      }
+    }
+    updatedParms.stepId++;
+    updatedParms.stepId = updatedParms.stepId % 2;
+
+    this.setState({
+      selectedValues: newSelection,
+      changedValues: newChanged,
+      values: newValues,
+      insertionParms: updatedParms
+    });
+
+    if(updatedParms.currentId>updatedParms.maxId){
+      this.initParams(this.state.algorithm, this.state.barAmount);
+    }
+  }
+
+  //------------------------ BUBBLE SORT ------------------------
   bubbleSort = () => {
     // console.log('[Bubble sort] - entered');
     const updatedParms = {...this.state.bubbleParms};

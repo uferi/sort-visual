@@ -1,6 +1,7 @@
 .Dropdown {
+    /* outline: 1px solid red; */
     box-sizing: border-box;
-    margin: 0px 10px;
+    /* margin: 0px 10px; */
 }
 
 .Select {
@@ -49,3 +50,15 @@ background-image: linear-gradient(hsl(195, 50%, 10%), hsl(195, 50%, 80%)),
     linear-gradient(-225deg, transparent 50%, hsl(195, 50%, 70%) 50%),
     linear-gradient(hsl(195, 50%, 40%) 42%, hsl(195, 50%, 40%) 42%);
  */
+
+@media (max-width: 600px) {
+    .Select {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .Select {
+        font-size: 12px;
+    }
+}
